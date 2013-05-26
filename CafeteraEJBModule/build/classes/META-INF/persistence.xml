@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+   <persistence-unit name="cafeteraDS">
+      <provider>org.hibernate.ejb.HibernatePersistence</provider>
+      <jta-data-source>java:jboss/datasources/CafeteraDS</jta-data-source>
+      <class>com.productos.entities.MateriaPrima</class>
+      <class>com.seguridad.entities.Usuario</class>
+      <class>com.seguridad.entities.Rol</class>
+      <properties>
+         <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+         <property name="hibernate.hbm2ddl.auto" value="update"/>
+         <property name="showSql" value="true"/>
+         <property name="hibernate.case.use_query_cache" value="true"/>
+      </properties>
+   </persistence-unit>
+</persistence>

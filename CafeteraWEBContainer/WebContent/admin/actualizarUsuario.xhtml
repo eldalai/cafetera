@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<h:outputStylesheet library="css" name="default.css"  />
+
+	<title>Login</title>
+</h:head>
+<h:body>
+
+	<h:form method="post" id='form'>
+		<h2>Agregar un usuario nuevo</h2>
+		<h:panelGrid columns="3">
+			<h:outputText value="Login" />
+			<h:outputText value="#{actualizarUsuarioForm.usuarioEditado.login}" /><BR />
+			
+			<h:outputText value="Nombre" />
+			<h:inputText id="nombre" value="#{actualizarUsuarioForm.usuarioEditado.nombre}" />
+			<h:message for="nombre"/>
+						
+			<h:outputText value="Email" />
+			<h:inputText id="email" value="#{actualizarUsuarioForm.usuarioEditado.email}" />
+			<h:message for="email"/>
+						
+			<h:outputText value="Inicio vigencia" />
+			<h:inputText id="inicioVigencia" value="#{actualizarUsuarioForm.usuarioEditado.inicioVigencia}" >
+            	<f:convertDateTime pattern="dd/MM/yyyy" />
+			</h:inputText>
+			<h:message for="inicioVigencia"/>
+			
+			<h:outputText value="Roles Habilitados" />
+			<h:selectManyCheckbox id="roles" value="#{actualizarUsuarioForm.usuarioEditado.roles}" layout="pageDirection">
+				<f:selectItems value="#{actualizarUsuarioForm.getRolesDisponibles()}" var="r"  itemValue="#{r}" itemLabel="#{r}" />			
+			</h:selectManyCheckbox>
+			<h:message for="roles"/>
+			
+		</h:panelGrid>
+		    <h:messages />
+		<h:panelGrid columns="2">
+			<h:commandButton value="Guardar" action="#{actualizarUsuarioForm.save}" />
+			<h:commandButton value="Volver" action="usuario.xhtml" immediate="true"/>
+		</h:panelGrid>
+	</h:form>
+
+
+</h:body>
+</html>

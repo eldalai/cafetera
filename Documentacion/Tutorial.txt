@@ -1,0 +1,120 @@
+
+1- Descomprimir JBoss 7.1.1
+
+2- Instalar MySQL y creamos la base de datos "cafetera"
+
+	CREATE SCHEMA `cafetera` ;
+	
+3- Para manejar la autenticacion con base de datos necesitamos al menos 2 tablas :
+
+	CREATE TABLE `usuario` (
+	  `login` varchar(128) NOT NULL,
+	  `email` varchar(128) DEFAULT NULL,
+	  `finVigencia` date DEFAULT NULL,
+	  `inicioVigencia` date NOT NULL,
+	  `nombre` varchar(128) NOT NULL,
+	  `password` varchar(255) NOT NULL,
+	  PRIMARY KEY (`login`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+	INSERT INTO `usuario` (`login`,`email`,`finVigencia`,`inicioVigencia`,`nombre`,`password`) VALUES ('admin','admin@cafetera.com',NULL,'1999-12-31','Administrador','ISMvKXpXpadDiUoOSoAfww==');
+
+	CREATE TABLE `rol` (
+	  `id` int(11) NOT NULL,
+	  `nombre` varchar(255) DEFAULT NULL,
+	  `usuarioId` varchar(255) DEFAULT NULL,
+	  PRIMARY KEY (`id`),
+	  KEY `FK141AFAB062235` (`usuarioId`),
+	  CONSTRAINT `FK141AFAB062235` FOREIGN KEY (`usuarioId`) REFERENCES `usuario` (`login`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+	INSERT INTO `rol` (`id`,`nombre`,`usuarioId`) VALUES (1,'USER','admin');
+	INSERT INTO `rol` (`id`,`nombre`,`usuarioId`) VALUES (2,'ADMIN','admin');
+
+
+4- Instalar el modulo MySQL en Jboss
+
+	a- Copiar el contenido del modulo a modules/com/
+	
+	b- Crear la referencia al modulo
+	
+		Editar : /standalone/configuration/standalone.xml
+		
+		<drivers>
+		...
+		<driver name="mysqlDriver" module="com.mysql">
+			<xa-datasource-class>
+				com.mysql.jdbc.Driver
+			</xa-datasource-class>
+		</driver>
+		</drivers>
+	
+	c- Crear el origen de datos para la base de datos cafetera
+	
+		Editar : /standalone/configuration/standalone.xml
+
+		<datasource jndi-name="java:jboss/datasources/CafeteraDS" pool-name="CafeteraDS" enabled="true" use-java-context="true">
+			<connection-url>jdbc:mysql://localhost:3306/cafetera?zeroDateTimeBehavior=convertToNull</connection-url>
+			<driver>mysqlDriver</driver>
+			<security>
+				<user-name>root</user-name>
+				<password>root</password>
+			</security>
+		</datasource>
+	
+5- Configuracion de la seguridad con la base datos MySQL
+
+	a- Creamos el SecurityDomain
+	
+		<security-domain name="DBAuthCafetera" cache-type="default">
+			<authentication>
+				<login-module code="Remoting" flag="optional">
+					<module-option name="password-stacking" value="useFirstPass"/>
+				</login-module>
+				<login-module code="org.jboss.security.auth.spi.DatabaseServerLoginModule" flag="required">
+					<module-option name="dsJndiName" value="java:jboss/datasources/CafeteraDS"/>
+					<module-option name="principalsQuery" value="select password from usuario where login=?"/>
+					<module-option name="rolesQuery" value="select nombre, 'Roles' from rol where usuarioId=?"/>
+					<module-option name="hashAlgorithm" value="MD5"/>
+					<module-option name="hashEncoding" value="base64"/>
+					<module-option name="password-stacking" value="useFirstPass"/>
+				</login-module>
+			</authentication>
+		</security-domain>
+
+
+	b- Agregamos el security REALM
+	
+		<security-realm name="CafeteraRealm">
+			<authentication>
+				<jaas name="DBAuthCafetera"/>
+			</authentication>
+		</security-realm>
+
+	c- Definimos el remoting connector para que tome el REALM que acabamos de definir
+	
+	    <subsystem xmlns="urn:jboss:domain:remoting:1.1">
+            <connector name="remoting-connector" socket-binding="remoting" security-realm="CafeteraRealm"/>
+        </subsystem>
+
+		
+===============================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

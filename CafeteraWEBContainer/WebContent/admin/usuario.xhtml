@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<h:outputStylesheet library="css" name="default.css"  />
+
+	<title>Usuarios del Sistema</title>
+</h:head>
+<h:body>
+	<h:form method="post">
+		<h2>Usuarios del Sistema</h2>
+	
+		<h:dataTable value="#{usuarioForm.usuarios}" var="o" styleClass="abm" >
+			<h:column>
+				<f:facet name="header">Login</f:facet>
+				#{o.login}
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">Nombre</f:facet>
+				#{o.nombre}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Email</f:facet>
+				#{o.email}
+			</h:column>			
+			
+			<h:column>
+				<f:facet name="header">Roles</f:facet>
+				#{o.roles}
+			</h:column>			
+
+			<h:column>
+				 <h:commandButton value="Activar Usuario" action="#{usuarioForm.activarUsuario(o.login)}" rendered="#{!o.activo}"/> 
+				 <h:commandButton value="Desactivar Usuario" action="#{usuarioForm.desactivarUsuario(o.login) }" rendered="#{o.activo}"/>
+				 <h:outputText value=" " /> 
+				 <h:commandButton value="Editar" action="actualizarUsuario" > 
+				 	<f:param name="login" value="#{o.login}"></f:param>
+				 </h:commandButton> 
+				 <h:outputText value=" " /> 
+				 <h:commandButton value="Cambiar Passw." action="cambiarPasswordUsuario" > 
+				 	<f:param name="login" value="#{o.login}"></f:param>
+				 </h:commandButton> 
+			 </h:column>
+		</h:dataTable>
+
+		<h:commandButton value="Nuevo Usuario"  action="registrarUsuario" />
+		<h:commandButton value="Volver a Indice" action="/index.xhtml" immediate="true" />
+		
+        <br />         
+	</h:form>
+</h:body>
+</html>

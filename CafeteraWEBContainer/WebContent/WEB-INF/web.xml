@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name>Cafetera</display-name>
+
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>index.xhtml</welcome-file>
+	</welcome-file-list>
+
+	<!-- Configuracion de Acceso a Paginas -->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Accesos ADMIN</web-resource-name>
+			<url-pattern>/admin/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>ADMIN</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Compartidos ADMIN y USER</web-resource-name>
+			<url-pattern>/common/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>ADMIN</role-name>
+			<role-name>USER</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<!-- La configuracion de las paginas que corresponden para login y error de login -->
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<form-login-config>
+			<form-login-page>/login.xhtml</form-login-page>
+			<form-error-page>/login.xhtml</form-error-page>
+		</form-login-config>
+	</login-config>
+
+	<!-- Los roles del sistema -->
+	<security-role>
+		<role-name>ADMIN</role-name>
+	</security-role>
+	<security-role>
+		<role-name>USER</role-name>
+	</security-role>
+
+	<error-page>
+	    <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+	    <location>/index.xhtml</location>
+	</error-page>
+	<error-page>  
+	    <exception-type>java.lang.Exception</exception-type>
+		<location>/error.xhtml</location>  
+	</error-page>
+	
+</web-app>

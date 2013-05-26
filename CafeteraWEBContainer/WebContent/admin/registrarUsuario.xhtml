@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<h:outputStylesheet library="css" name="default.css"  />
+
+	<title>Agregar un usuario nuevo</title>
+</h:head>
+<h:body>
+
+	<h:form method="post" id='form'>
+		<h2>Agregar un usuario nuevo</h2>
+		<h:panelGrid columns="3">
+			<h:outputText value="Login" />
+			<h:inputText id="login" value="#{registrarUsuarioForm.usuarioEditado.login}"/>
+			<h:message for="login"/>
+			
+			<h:outputText value="Nombre" />
+			<h:inputText id="nombre" value="#{registrarUsuarioForm.usuarioEditado.nombre}" />
+			<h:message for="nombre"/>
+			
+			
+			<h:outputText value="Contraseña" />
+			<h:inputSecret id="plainTextPassword" value="#{registrarUsuarioForm.plainTextPassword}" />
+			<h:message for="plainTextPassword"/>
+			
+			<h:outputText value="Repetir Contraseña" />
+			<h:inputSecret id="plainTextPassword2" value="#{registrarUsuarioForm.plainTextPassword2}" />
+			<h:message for="plainTextPassword2"/>
+						
+			<h:outputText value="Email" />
+			<h:inputText id="email" value="#{registrarUsuarioForm.usuarioEditado.email}" />
+			<h:message for="email"/>
+						
+			<h:outputText value="Inicio vigencia" />
+			<h:inputText id="inicioVigencia" value="#{registrarUsuarioForm.usuarioEditado.inicioVigencia}" >
+            	<f:convertDateTime pattern="dd/MM/yyyy" />
+			</h:inputText>
+			<h:message for="inicioVigencia"/>
+			
+			<h:outputText value="Roles Habilitados" />
+			<h:selectManyCheckbox id="roles" value="#{registrarUsuarioForm.usuarioEditado.roles}" layout="pageDirection">
+				<f:selectItems value="#{registrarUsuarioForm.getRolesDisponibles()}" var="r"  itemValue="#{r}" itemLabel="#{r}" />			
+			</h:selectManyCheckbox>
+			<h:message for="roles"/>
+			
+		</h:panelGrid>
+		    <h:messages />
+		<h:panelGrid columns="2">
+			<h:commandButton value="Guardar" action="#{registrarUsuarioForm.save}" />
+			<h:commandButton value="Volver" action="usuario.xhtml" immediate="true"/>
+		</h:panelGrid>
+	</h:form>
+
+
+</h:body>
+</html>

@@ -1,0 +1,27 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<h:outputStylesheet library="css" name="default.css"  />
+	<title>Cafetera Automática</title>
+</h:head>
+<h:body>
+	<h:form method="post">
+		<h2>Cafetera Automática</h2>
+		<p><h:messages /></p>
+	
+		<p>
+			<h:panelGroup rendered="#{empty request.userPrincipal}">
+				<h:commandButton value="Login" action="login" />
+			</h:panelGroup>
+			<h:panelGroup  rendered="#{not empty request.userPrincipal}">
+				Usuario : <h:outputText value="#{request.getUserPrincipal()}" />
+				<h:commandButton value="Logout" action="#{authentication.logout}" />
+			</h:panelGroup>
+			<BR />
+			<h:commandButton value="Usuarios" action="admin/usuario?faces-redirect=true"  /><BR />
+			<h:commandButton value="Ver Pantalla Welcome" action="welcome" /><BR />
+		</p>
+	</h:form>
+</h:body>
+</html>
