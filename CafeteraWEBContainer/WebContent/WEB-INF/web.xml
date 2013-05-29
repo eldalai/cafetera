@@ -3,12 +3,34 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 	<display-name>Cafetera</display-name>
-
+	<context-param>
+		<param-name>resteasy.scan</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>resteasy.servlet.mapping.prefix</param-name>
+		<param-value>/rest</param-value>
+	</context-param>
+	<listener>
+		<listener-class>
+			org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
+		</listener-class>
+	</listener>
+	<servlet>
+		<servlet-name>resteasy-servlet</servlet-name>
+		<servlet-class>
+			org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+		</servlet-class>
+	</servlet>
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet-mapping>
+		<servlet-name>resteasy-servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
@@ -28,7 +50,7 @@
 			<role-name>ADMIN</role-name>
 		</auth-constraint>
 	</security-constraint>
-	
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Compartidos ADMIN y USER</web-resource-name>
@@ -40,7 +62,8 @@
 		</auth-constraint>
 	</security-constraint>
 
-	<!-- La configuracion de las paginas que corresponden para login y error de login -->
+	<!-- La configuracion de las paginas que corresponden para login y error 
+		de login -->
 	<login-config>
 		<auth-method>FORM</auth-method>
 		<form-login-config>
@@ -58,12 +81,12 @@
 	</security-role>
 
 	<error-page>
-	    <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-	    <location>/index.xhtml</location>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/index.xhtml</location>
 	</error-page>
-	<error-page>  
-	    <exception-type>java.lang.Exception</exception-type>
-		<location>/error.xhtml</location>  
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/error.xhtml</location>
 	</error-page>
-	
+
 </web-app>
